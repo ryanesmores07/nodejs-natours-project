@@ -16,22 +16,47 @@ const viewRouter = require('./routes/viewRoutes');
 
 const app = express();
 
+// Set view engine and views directory
 app.set('view engine', 'pug');
 app.set('views', path.join(__dirname, 'views'));
 
-// 1) GLOBAL MIDDLEWARES
-
-// Serving static files
+// Serve static files
 app.use(express.static(path.join(__dirname, 'public')));
+
 // Set security HTTP Headers
 app.use(helmet());
+
+// Content Security Policy (CSP) configuration
+const scriptSrcUrls = ['https://unpkg.com/', 'https://tile.openstreetmap.org'];
+const styleSrcUrls = [
+  'https://unpkg.com/',
+  'https://tile.openstreetmap.org',
+  'https://fonts.googleapis.com/',
+];
+const connectSrcUrls = ['https://unpkg.com', 'https://tile.openstreetmap.org'];
+const fontSrcUrls = ['fonts.googleapis.com', 'fonts.gstatic.com'];
+
+app.use(
+  helmet.contentSecurityPolicy({
+    directives: {
+      defaultSrc: [],
+      connectSrc: ["'self'", ...connectSrcUrls],
+      scriptSrc: ["'self'", ...scriptSrcUrls],
+      styleSrc: ["'self'", "'unsafe-inline'", ...styleSrcUrls],
+      workerSrc: ["'self'", 'blob:'],
+      objectSrc: [],
+      imgSrc: ["'self'", 'blob:', 'data:', 'https:'],
+      fontSrc: ["'self'", ...fontSrcUrls],
+    },
+  })
+);
 
 // Development logging
 if (process.env.NODE_ENV === 'development') {
   app.use(morgan('dev'));
 }
 
-// Limit requests from same API
+// Rate limiter middleware
 const limiter = rateLimit({
   max: 100,
   windowMs: 60 * 60 * 1000,
@@ -42,10 +67,8 @@ app.use('/api', limiter);
 // Body parser, reading data from body into req.body
 app.use(express.json({ limit: '10kb' }));
 
-// Data sanitization against NoSQL query injection
+// Data sanitization middleware
 app.use(mongoSanitize());
-
-// Data sanitization against XSS
 app.use(xss());
 
 // Prevent parameter pollution
@@ -68,17 +91,18 @@ app.use((req, res, next) => {
   next();
 });
 
-// 3) ROUTES
-
+// Routes
 app.use('/', viewRouter);
 app.use('/api/v1/tours', tourRouter);
 app.use('/api/v1/users', userRouter);
 app.use('/api/v1/reviews', reviewRouter);
 
+// 404 route handler
 app.all('*', (req, res, next) => {
   next(new AppError(`Can't find ${req.originalUrl} on this server!`, 404));
 });
 
+// Global error handler
 app.use(globalErrorHandler);
 
 module.exports = app;
