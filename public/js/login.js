@@ -1,11 +1,40 @@
 /* eslint-disable */
+import axios from 'axios';
+import { showAlert } from './alert';
 
-const login = (email, password) => {};
+export const login = async (email, password) => {
+  console.log(email, password);
+  try {
+    const res = await axios({
+      method: 'POST',
+      url: 'http://127.0.1:3000/api/v1/users/login',
+      data: {
+        email,
+        password,
+      },
+    });
 
-document.querySelector('.form').addEventListener('submit', (e) => {
-  e.preventDefault();
+    if (res.data.status === 'Success') {
+      showAlert('success', 'logged in successfully');
+      window.setTimeout(() => {
+        location.assign('/');
+      }, 1500);
+    }
+  } catch (err) {
+    showAlert('error', err.response.data.message);
+  }
+};
 
-  const email = document.getElementById('email').value;
-  const password = document.getElementById('password').value;
-  login({ email, password });
-});
+export const logout = async () => {
+  try {
+    const res = await axios({
+      method: 'GET',
+      url: 'http://127.0.1:3000/api/v1/users/logout',
+      data: {},
+    });
+    if ((res.data.status = 'success')) location.reload(true);
+  } catch (error) {
+    console.log(error.response);
+    showAlert('error', 'Error logging out! Try again.');
+  }
+};
