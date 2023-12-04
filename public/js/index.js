@@ -20,10 +20,12 @@ if (leaflet) {
 if (userDataForm) {
   userDataForm.addEventListener('submit', (e) => {
     e.preventDefault();
-    const name = document.getElementById('name').value;
-    const email = document.getElementById('email').value;
-    const data = { name, email };
-    updateSettings(data, 'data');
+    const form = new FormData();
+    form.append('name', document.getElementById('name').value);
+    form.append('email', document.getElementById('email').value);
+    form.append('photo', document.getElementById('photo').files[0]);
+    console.log(form);
+    updateSettings(form, 'data');
   });
 }
 
