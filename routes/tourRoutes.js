@@ -44,18 +44,18 @@ router.route('/distances/:latlng/unit/:unit').get(getDistances);
 router
   .route('/')
   .get(getAllTours)
-  .post(
-    protect,
-    restrictTo('admin', 'lead-guide'),
-    uploadTourImages,
-    resizeTourImages,
-    createTour
-  );
+  .post(protect, restrictTo('admin', 'lead-guide'), createTour);
 
 router
   .route('/:id')
   .get(getSingleTour)
-  .patch(protect, restrictTo('admin', 'lead-guide'), updateTour)
+  .patch(
+    protect,
+    restrictTo('admin', 'lead-guide'),
+    uploadTourImages,
+    resizeTourImages,
+    updateTour
+  )
   .delete(protect, restrictTo('admin', 'lead-guide'), deleteTour);
 
 module.exports = router;
