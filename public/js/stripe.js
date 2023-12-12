@@ -1,7 +1,4 @@
 import axios from 'axios';
-// const stripe = Stripe(
-//   'pk_test_51OLhVMLkspFzUJgfTXTIdQOPSAXlz5VA3KQeXM646DIjYQEVEu28PfVHXO6caZMVpNWoDUOOqP6E4NX35GcxBhVr00s0PliJoH'
-// );
 
 export const bookTour = async (tourId) => {
   // 1) Get checkout session from API
