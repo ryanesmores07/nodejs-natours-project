@@ -41,13 +41,13 @@ const fontSrcUrls = ['fonts.googleapis.com', 'fonts.gstatic.com'];
 app.use(
   helmet.contentSecurityPolicy({
     directives: {
-      defaultSrc: [],
+      defaultSrc: ["'self'"],
       connectSrc: ["'self'", ...connectSrcUrls],
       scriptSrc: ["'self'", ...scriptSrcUrls],
       styleSrc: ["'self'", "'unsafe-inline'", ...styleSrcUrls],
       workerSrc: ["'self'", 'blob:'],
       objectSrc: [],
-      imgSrc: ["'self'", 'blob:', 'data:', 'https:'],
+      imgSrc: ["'self'", 'data:', '*'],
       fontSrc: ["'self'", ...fontSrcUrls],
     },
   })

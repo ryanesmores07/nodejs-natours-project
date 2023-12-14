@@ -2,11 +2,13 @@ extends base
 include reviewCard
 
 block append head
-  link(rel='stylesheet' href='https://unpkg.com/leaflet@1.6.0/dist/leaflet.css')
-  script(src='https://unpkg.com/leaflet@1.6.0/dist/leaflet.js')
-  script(src='/js/leaflet.js' defer)
-  script(src='https://js.stripe.com/v3/')
 
+  //- link(rel='stylesheet' href='https://unpkg.com/leaflet@1.6.0/dist/leaflet.css')
+  //- script(src='https://unpkg.com/leaflet@1.6.0/dist/leaflet.js')
+  link(rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.3/leaflet.css" integrity="sha256-kLaT2GOSpHechhsozzB+flnD+zUyjE2LlfWPgU04xyI=" crossorigin="")
+  script(src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.3/leaflet.js" integrity="sha256-WBkoXOwTeyKclOHuWtc+i2uENFpDZ9YPdf5Hf+D7ewM=" crossorigin="")
+  script(type="module" src='/js/leaflet.js' )
+  script(src='https://js.stripe.com/v3/')
 
 
   
