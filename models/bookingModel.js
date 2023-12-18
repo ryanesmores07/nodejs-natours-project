@@ -6,6 +6,7 @@ const bookingSchema = new mongoose.Schema({
     ref: 'Tour',
     required: [true, 'Booking must belong to a Tour!'],
   },
+
   user: {
     type: mongoose.Schema.ObjectId,
     ref: 'User',
@@ -13,7 +14,7 @@ const bookingSchema = new mongoose.Schema({
   },
   price: {
     type: Number,
-    require: [true, 'Booking must have a price.'],
+    required: [true, 'Booking must have a price.'],
   },
   createdAt: {
     type: Date,
@@ -26,11 +27,11 @@ const bookingSchema = new mongoose.Schema({
 });
 
 bookingSchema.pre(/^find/, function (next) {
-  console.log('PUTANG INA');
   this.populate('user').populate({
     path: 'tour',
     select: 'name',
   });
+  console.log('Middleware executed successfully for finding bookings.');
   next();
 });
 
