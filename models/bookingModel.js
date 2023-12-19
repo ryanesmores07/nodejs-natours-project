@@ -31,7 +31,7 @@ bookingSchema.pre(/^find/, function (next) {
     path: 'tour',
     select: 'name',
   });
-  console.log('Middleware executed successfully for finding bookings.');
+  // console.log('Middleware executed successfully for finding bookings.');
   next();
 });
 
