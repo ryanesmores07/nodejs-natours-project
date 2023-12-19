@@ -1,7 +1,7 @@
-const Tour = require('../models/tourModel');
 const multer = require('multer');
 const sharp = require('sharp');
 const catchAsync = require('../utils/catchAsync');
+const Tour = require('../models/tourModel');
 const factory = require('./handlerFactory');
 const AppError = require('../utils/appError');
 
@@ -43,7 +43,7 @@ exports.resizeTourImages = catchAsync(async (req, res, next) => {
   req.body.images = [];
   await Promise.all(
     req.files.images.map(async (file, i) => {
-      const filename = `tour-${req.params.id}-${Date.now()}-${i + 1}.jpeg$`;
+      const filename = `tour-${req.params.id}-${Date.now()}-${i + 1}.jpeg`;
 
       await sharp(file.buffer)
         .resize(2000, 1333)
@@ -54,7 +54,6 @@ exports.resizeTourImages = catchAsync(async (req, res, next) => {
       req.body.images.push(filename);
     })
   );
-  console.log(req.body);
   next();
 });
 
