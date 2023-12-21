@@ -1,4 +1,6 @@
 const Stripe = require('stripe');
+const stripe = Stripe(process.env.STRIPE_SECRET_KEY);
+
 // const stripe = require('stripe')(process.env.STRIPE_SECRET_KEY);
 
 const catchAsync = require('../utils/catchAsync');
@@ -10,7 +12,6 @@ const AppError = require('../utils/appError');
 
 exports.getCheckoutSession = catchAsync(async (req, res, next) => {
   // 1) Get the currently booked tour
-  const stripe = Stripe(process.env.STRIPE_SECRET_KEY);
   const tour = await Tour.findById(req.params.tourId);
 
   // 2) Create checkout session
@@ -68,7 +69,8 @@ const createBookingCheckout = async (session) => {
 };
 
 exports.webhookCheckout = (req, res, next) => {
-  const stripe = Stripe(process.env.STRIPE_SECRET_KEY);
+  console.log('Webhook firing alright');
+
   const signature = req.headers['stripe-signature'];
   let event;
   try {
