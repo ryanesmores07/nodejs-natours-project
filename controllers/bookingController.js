@@ -69,8 +69,6 @@ const createBookingCheckout = async (session) => {
 };
 
 exports.webhookCheckout = (req, res, next) => {
-  console.log('Webhook firing alright');
-
   const signature = req.headers['stripe-signature'];
   let event;
   try {
@@ -79,6 +77,7 @@ exports.webhookCheckout = (req, res, next) => {
       signature,
       process.env.STRIPE_WEBHOOK_SECRET
     );
+    console.log(event);
   } catch (error) {
     return res.status(400).send(`Webhook error: ${error.message}`);
   }
